@@ -3,22 +3,95 @@
 	<title>BrunoSupremo</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="/css.css" type="text/css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<link rel="stylesheet" href="css.css" type="text/css">
 </head>
 <body>
-	<header>
-		<img src="https://yt3.ggpht.com/-0ZrQegrBe_4/AAAAAAAAAAI/AAAAAAAAAAA/5HuUldwecUg/s88-c-k-no/photo.jpg">
-		<span>Bruno Supremo</span>
-	</header>
-	<main>
-		<h1>Titulo</h1>
-		<p>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis.</p>
-
+	<section id="sobre">
+		<div>
+			<img id="logo" src="https://yt3.ggpht.com/-0ZrQegrBe_4/AAAAAAAAAAI/AAAAAAAAAAA/5HuUldwecUg/s88-c-k-no/photo.jpg">
+		</div>
+		<div>
+			<h1>Bruno Supremo</h1>
+			<p>Olá, bem-vindo. Meu nome é Bruno e faço vídeos no youtube sobre jogos, principalmente no gênero "sandbox".</p>
+		</div>
+	</section>
+	<section>
+		<h1>Vídeos</h1>
 		<div id="div_youtube"></div>
 		<script type="text/javascript">
-			$.get("https://www.googleapis.com/youtube/v3/channels", {part : 'contentDetails', id : 'UCarJcPNKh6gMqxJstGEHjnQ', key: 'AIzaSyCvcRe4dX3rWAQGhz9TFSoqWNcurrspe0A'}, function(data) {$.each( data.items, function( i, item ) {pid = item.contentDetails.relatedPlaylists.uploads; getVids(pid); } ); } ); function getVids(pid){$.get("https://www.googleapis.com/youtube/v3/playlistItems", {part : 'snippet', maxResults : 6, playlistId : pid, key: 'AIzaSyCvcRe4dX3rWAQGhz9TFSoqWNcurrspe0A'}, function(data) {var results; $.each( data.items, function( i, item ) {results = '<a href="https://www.youtube.com/watch?v='+ item.snippet.resourceId.videoId +'"><img src="'+item.snippet.thumbnails.medium.url+'"><span>'+item.snippet.title+'</span></a>'; $('#div_youtube').append(results); }); } ); }
+			let div_youtube = document.getElementById('div_youtube');
+			let maxResults = 4;
+			if (div_youtube.offsetWidth >= 1080 && div_youtube.offsetWidth < 1440){
+				// nesse tamanho especifico 4 videos fica feio pois o ultimo fica na linha de baixo
+				// |1 2 3|
+				// |  4  |
+				maxResults = 3;
+			}
+			fetch("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults="+maxResults+"&playlistId=UUarJcPNKh6gMqxJstGEHjnQ&key=AIzaSyCvcRe4dX3rWAQGhz9TFSoqWNcurrspe0A")
+			.then((resp) => resp.json())
+			.then(function(data) {
+				for (item of data.items) {
+					let img = document.createElement("img");
+					img.src = item.snippet.thumbnails.medium.url;
+					let span = document.createElement("span");
+					span.innerHTML = item.snippet.title;
+					let a = document.createElement("a");
+					a.href = 'https://www.youtube.com/watch?v='+ item.snippet.resourceId.videoId;
+					a.appendChild(img);
+					a.appendChild(span);
+					div_youtube.appendChild(a);
+				}
+			})
+			.catch(function(e){
+				let img = document.createElement("img");
+				img.classList = "error";
+				let span = document.createElement("span");
+				span.innerHTML = "Falha na conexão";
+				let a = document.createElement("a");
+				a.appendChild(img);
+				a.appendChild(span);
+				div_youtube.appendChild(a);
+			});
 		</script>
-	</main>
+		<p>Ou encontre mais outros visitando o <a class="botao_acao" href="https://www.youtube.com/c/BrunoSupremo">canal no Youtube 🔗</a></p>
+	</section>
+	<section>
+		<h1>Downloads</h1>
+		<div id="div_downloads">
+			<div>
+				<p>
+					Programa 1:<br>
+					Descrição do programa 1
+				</p>
+				<a href="">Download</a>
+			</div>
+			<div>
+				<p>
+					Programa 2:<br>
+					Descrição do programa 2
+				</p>
+				<a href="">Download</a>
+			</div>
+			<div>
+				<p>
+					Programa 3:<br>
+					Descrição do programa 3
+				</p>
+				<a href="">Download</a>
+			</div>
+		</div>
+	</section>
+	<section>
+		<h1>Contato</h1>
+		<div id="div_contatos">
+			<a href="">Discord</a>
+			<a href="">Facebook</a>
+			<a href="">Twitter</a>
+		</div>
+		<form>
+			<textarea onkeyup="this.style.height = this.scrollHeight+'px';" required="true" placeholder="Ou envie uma mensagem simples por aqui"></textarea>
+			<input type="submit" name="">
+		</form>
+	</section>
 </body>
 </html>
